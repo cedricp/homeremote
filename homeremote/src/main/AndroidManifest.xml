@@ -29,7 +29,7 @@
             </intent-filter>
         </service>
         <service
-            android:name=".GCMRegistrationIntentService"
+            android:name=".GCMRegistrationService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID" />

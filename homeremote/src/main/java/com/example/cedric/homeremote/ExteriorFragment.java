@@ -20,6 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by cedric on 1/25/16.
@@ -27,7 +28,7 @@ import java.util.Timer;
 public class ExteriorFragment extends Fragment implements HttpRequest.onHttpRequestComplete {
     private ToggleButton[] toggles;
     private Timer timer;
-    private StatusUpdaterTask timerTask;
+    private TimerTask timerTask;
     static String httpServer, port, key;
 
     @Override
@@ -209,9 +210,14 @@ public class ExteriorFragment extends Fragment implements HttpRequest.onHttpRequ
         key = SP.getString("key", "");
         Log.d(">>>", "Preference host : " + httpServer);
         // Send a request to initialize all buttons status from server
-        timerTask = new StatusUpdaterTask(this);
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                updateFromServer();
+            }
+        };
         timer = new Timer();
-        timer.schedule(timerTask, 10, 5000);
+        timer.schedule(timerTask, 10, 10000);
 
         registerDevice();
 
@@ -245,7 +251,7 @@ public class ExteriorFragment extends Fragment implements HttpRequest.onHttpRequ
     }
 
     private void registerDevice(){
-        Intent intent = new Intent(getActivity(), GCMRegistrationIntentService.class);
+        Intent intent = new Intent(getActivity(), GCMRegistrationService.class);
         getActivity().startService(intent);
     }
 

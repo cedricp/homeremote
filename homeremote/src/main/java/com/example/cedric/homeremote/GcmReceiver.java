@@ -51,7 +51,6 @@ public class GcmReceiver extends GcmListenerService {
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_NOTIFICATION);
             mediaPlayer.prepare();
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-
                 @Override
                 public void onCompletion(MediaPlayer mp)
                 {
