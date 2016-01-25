@@ -65,7 +65,7 @@ public class swGateWidget extends BaseWidget implements swGateHttpRequest.onHttp
         scheduleRepeatingRefresh(System.currentTimeMillis(), 600 * 1000,
                 swGateExtensionService.EXTENSION_KEY);
         String request = "http://" + httpServer + ":" + port + "/control.py?key=" + key;
-        (new swGateHttpRequest(this)).execute(httpServer);
+        (new swGateHttpRequest(this)).execute(request);
         showWidget();
     }
 
