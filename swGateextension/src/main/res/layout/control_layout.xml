@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/smart_watch_2_control_width"
+    android:layout_height="@dimen/smart_watch_2_control_height"
+    tools:ignore="PxUsage,UselessParent,HardcodedText" >
+
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/smart_watch_2_text_size_small"
+            android:text="empty"
+            android:id="@+id/headerText"
+            android:textAlignment="center" />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="43px"
+            android:text="Test"
+            android:id="@+id/topButton"
+            android:textSize="12px"
+            android:checked="true"
+            android:padding="0px" />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="43px"
+            android:text="Test"
+            android:id="@+id/centerButton"
+            android:textSize="12px"
+            android:layout_gravity="center_horizontal"
+            android:padding="0px" />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="43px"
+            android:text="Test"
+            android:id="@+id/bottomButton"
+            android:textSize="12px"
+            android:layout_gravity="center_horizontal"
+            android:padding="0px" />
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Gate Control</string>
+    <string name="extension_name">Gate Control widget</string>
+    <string name="widget_name">gate</string>
+    <string name="preference_activity_title">GateControl Settings</string>
+    <string name="configuration_text">Settings</string>
+</resources>

@@ -1,0 +1,1 @@
+include ':homeremote', ':swGateextension', ':smartExtensionUtils', ':smartExtensionAPI'

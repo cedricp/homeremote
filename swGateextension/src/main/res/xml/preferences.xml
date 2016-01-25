@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference android:title="WEB Host"
+        android:key="host"
+        android:summary="Provide the Web rest server"></EditTextPreference>
+    <EditTextPreference
+        android:defaultValue="8080"
+        android:inputType="number"
+        android:key="port"
+        android:summary="Define Web server port number"
+        android:title="Port" />
+    <EditTextPreference android:title="Private key"
+        android:key="key"
+        android:summary="Private key to acces server"></EditTextPreference>
+</PreferenceScreen>
