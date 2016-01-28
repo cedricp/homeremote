@@ -27,17 +27,17 @@ public class swGateControl extends ControlExtension implements swGateHttpRequest
             {"Cars yard", "Gate", "Car Light", "temp"},
             {"Backyard", "WallLight1", "WallLight2", "SwPoolLight", "BackyardLight", "All ON", "All Off"}
     };
-    private String water_temp = "";
-    private String air_temp = "";
+    private String water_temp   = "Nack";
+    private String air_temp     = "Nack";
 
     boolean walllight1_status, walllight2_status, swimmingpoollight_status, backyardlight_status;
 
     swGateControl(Context context, String hostAppPackageName) {
         super(context, hostAppPackageName);
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(context);
-        httpServer = SP.getString("host", "");
-        port = SP.getString("port", "");
-        key = SP.getString("key", "");
+        httpServer  = SP.getString("host", "");
+        port        = SP.getString("port", "");
+        key         = SP.getString("key", "");
     }
 
     @Override
@@ -52,10 +52,10 @@ public class swGateControl extends ControlExtension implements swGateHttpRequest
             JSONObject jsonOb = new JSONObject(s);
             JSONArray relays = jsonOb.getJSONArray("RELAYSSTAUS");
 
-            water_temp = jsonOb.getString("WATERTEMP");
-            air_temp = jsonOb.getString("AIRTEMP");
-            walllight1_status = relays.get(0).toString().equals("1") ? true : false;
-            walllight2_status = relays.get(1).toString().equals("1") ? true : false;
+            water_temp          = jsonOb.getString("WATERTEMP");
+            air_temp            = jsonOb.getString("AIRTEMP");
+            walllight1_status   = relays.get(0).toString().equals("1") ? true : false;
+            walllight2_status   = relays.get(1).toString().equals("1") ? true : false;
             swimmingpoollight_status = relays.get(3).toString().equals("1") ? true : false;
             backyardlight_status = relays.get(2).toString().equals("1") ? true : false;
         }
@@ -82,7 +82,7 @@ public class swGateControl extends ControlExtension implements swGateHttpRequest
         if (s.isEmpty())
             (new swGateHttpRequest(this)).execute("http://" + httpServer + ":" + port + "/control.py?key=" + key);
         else
-            (new swGateHttpRequest(this)).execute("http://" + httpServer + ":" + port + "/control.py?key=" +key + "&" + s);
+            (new swGateHttpRequest(this)).execute("http://" + httpServer + ":" + port + "/control.py?key=" + key + "&" + s);
     }
 
     @Override
@@ -138,19 +138,19 @@ public class swGateControl extends ControlExtension implements swGateHttpRequest
             switch (itemLayoutReference) {
                 case R.id.topButton:
                     startVibrator(200,0,1);
-                    sendHttpRequest("setrelay=0&status=" + Integer.valueOf(walllight1_status == true ? 0 : 1));
+                    sendHttpRequest("setrelay=0&status=" + Integer.valueOf(walllight1_status ? 0 : 1));
                     break;
                 case R.id.centerButton:
                     startVibrator(200,0,1);
-                    sendHttpRequest("setrelay=1&status=" + Integer.valueOf(walllight2_status == true ? 0 : 1));
+                    sendHttpRequest("setrelay=1&status=" + Integer.valueOf(walllight2_status ? 0 : 1));
                     break;
                 case R.id.bottomButton:
                     startVibrator(200,0,1);
-                    sendHttpRequest("setrelay=3&status=" + Integer.valueOf(swimmingpoollight_status == true ? 0 : 1));
+                    sendHttpRequest("setrelay=3&status=" + Integer.valueOf(swimmingpoollight_status ? 0 : 1));
                     break;
                 case R.id.topRight:
                     startVibrator(200,0,1);
-                    sendHttpRequest("setrelay=2&status=" + Integer.valueOf(backyardlight_status == true ? 0 : 1));
+                    sendHttpRequest("setrelay=2&status=" + Integer.valueOf(backyardlight_status ? 0 : 1));
                     break;
                 case R.id.centerRight:
                     startVibrator(200,0,1);
@@ -177,10 +177,10 @@ public class swGateControl extends ControlExtension implements swGateHttpRequest
         mMenuItemsText[0].putString(Control.Intents.EXTRA_MENU_ITEM_TEXT, "Reconnect");
         mMenuItemsText[1] = new Bundle();
         mMenuItemsText[1].putInt(Control.Intents.EXTRA_MENU_ITEM_ID, 1);
-        mMenuItemsText[1].putString(Control.Intents.EXTRA_MENU_ITEM_TEXT, "NoOp");
+        mMenuItemsText[1].putString(Control.Intents.EXTRA_MENU_ITEM_TEXT, "...");
         mMenuItemsText[2] = new Bundle();
         mMenuItemsText[2].putInt(Control.Intents.EXTRA_MENU_ITEM_ID, 2);
-        mMenuItemsText[2].putString(Control.Intents.EXTRA_MENU_ITEM_TEXT, "NoOp");
+        mMenuItemsText[2].putString(Control.Intents.EXTRA_MENU_ITEM_TEXT, "...");
         showMenu(mMenuItemsText);
 
     }
@@ -218,37 +218,43 @@ public class swGateControl extends ControlExtension implements swGateHttpRequest
 
         headertext += " | Air:" + air_temp + "| Water:" + water_temp;
 
-        Bundle bundle1 = new Bundle();
-        Bundle bundle2 = new Bundle();
-        Bundle bundle3 = new Bundle();
-        Bundle bundle4 = new Bundle();
-        Bundle bundle5 = new Bundle();
-        Bundle bundle6 = new Bundle();
-        Bundle bundle7 = new Bundle();
-        bundle1.putInt(Control.Intents.EXTRA_LAYOUT_REFERENCE, R.id.topButton);
-        bundle1.putString(Control.Intents.EXTRA_TEXT, mLayoutContent[1][1] + ":" + topState);
-        bundle2.putInt(Control.Intents.EXTRA_LAYOUT_REFERENCE, R.id.centerButton);
-        bundle2.putString(Control.Intents.EXTRA_TEXT, mLayoutContent[1][2] + ":" + centerState);
-        bundle3.putInt(Control.Intents.EXTRA_LAYOUT_REFERENCE, R.id.bottomButton);
-        bundle3.putString(Control.Intents.EXTRA_TEXT, mLayoutContent[1][3] + ":" + bottomState);
+        Bundle topButtonBundle          = new Bundle();
+        Bundle centerButtonBundle       = new Bundle();
+        Bundle bottomButtonBundle       = new Bundle();
+        Bundle headerTextBundle         = new Bundle();
+        Bundle topRightButtonBundle     = new Bundle();
+        Bundle centerRightButtonBundle  = new Bundle();
+        Bundle bottomRightButtonBundle  = new Bundle();
 
-        bundle4.putInt(Control.Intents.EXTRA_LAYOUT_REFERENCE, R.id.headerText);
-        bundle4.putString(Control.Intents.EXTRA_TEXT, headertext);
+        topButtonBundle.putInt(Control.Intents.EXTRA_LAYOUT_REFERENCE, R.id.topButton);
+        topButtonBundle.putString(Control.Intents.EXTRA_TEXT, mLayoutContent[1][1] + ":" + topState);
 
-        bundle5.putInt(Control.Intents.EXTRA_LAYOUT_REFERENCE, R.id.topRight);
-        bundle5.putString(Control.Intents.EXTRA_TEXT, mLayoutContent[1][4] + ":" + topRightState);
-        bundle6.putInt(Control.Intents.EXTRA_LAYOUT_REFERENCE, R.id.centerRight);
-        bundle6.putString(Control.Intents.EXTRA_TEXT, mLayoutContent[1][5]);
-        bundle7.putInt(Control.Intents.EXTRA_LAYOUT_REFERENCE, R.id.bottomRight);
-        bundle7.putString(Control.Intents.EXTRA_TEXT, mLayoutContent[1][6]);
+        centerButtonBundle.putInt(Control.Intents.EXTRA_LAYOUT_REFERENCE, R.id.centerButton);
+        centerButtonBundle.putString(Control.Intents.EXTRA_TEXT, mLayoutContent[1][2] + ":" + centerState);
+
+        bottomButtonBundle.putInt(Control.Intents.EXTRA_LAYOUT_REFERENCE, R.id.bottomButton);
+        bottomButtonBundle.putString(Control.Intents.EXTRA_TEXT, mLayoutContent[1][3] + ":" + bottomState);
+
+        headerTextBundle.putInt(Control.Intents.EXTRA_LAYOUT_REFERENCE, R.id.headerText);
+        headerTextBundle.putString(Control.Intents.EXTRA_TEXT, headertext);
+
+        topRightButtonBundle.putInt(Control.Intents.EXTRA_LAYOUT_REFERENCE, R.id.topRight);
+        topRightButtonBundle.putString(Control.Intents.EXTRA_TEXT, mLayoutContent[1][4] + ":" + topRightState);
+
+        centerRightButtonBundle.putInt(Control.Intents.EXTRA_LAYOUT_REFERENCE, R.id.centerRight);
+        centerRightButtonBundle.putString(Control.Intents.EXTRA_TEXT, mLayoutContent[1][5]);
+
+        bottomRightButtonBundle.putInt(Control.Intents.EXTRA_LAYOUT_REFERENCE, R.id.bottomRight);
+        bottomRightButtonBundle.putString(Control.Intents.EXTRA_TEXT, mLayoutContent[1][6]);
+
         item.layoutData = new Bundle[7];
-        item.layoutData[0] = bundle1;
-        item.layoutData[1] = bundle2;
-        item.layoutData[2] = bundle3;
-        item.layoutData[3] = bundle4;
-        item.layoutData[4] = bundle5;
-        item.layoutData[5] = bundle6;
-        item.layoutData[6] = bundle7;
+        item.layoutData[0] = topButtonBundle;
+        item.layoutData[1] = centerButtonBundle;
+        item.layoutData[2] = bottomButtonBundle;
+        item.layoutData[3] = headerTextBundle;
+        item.layoutData[4] = topRightButtonBundle;
+        item.layoutData[5] = centerRightButtonBundle;
+        item.layoutData[6] = bottomRightButtonBundle;
 
         return item;
     }

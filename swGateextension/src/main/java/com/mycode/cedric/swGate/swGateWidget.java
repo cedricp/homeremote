@@ -22,7 +22,7 @@ public class swGateWidget extends BaseWidget implements swGateHttpRequest.onHttp
     public swGateWidget(WidgetBundle bundle) {
         super(bundle);
     }
-    private String httpServer, port, key, server;
+    private String httpServer, port, key;
 
     private int numActive = -1;
 
@@ -64,9 +64,8 @@ public class swGateWidget extends BaseWidget implements swGateHttpRequest.onHttp
     public void onStartRefresh() {
         scheduleRepeatingRefresh(System.currentTimeMillis(), 600 * 1000,
                 swGateExtensionService.EXTENSION_KEY);
-        String request = "http://" + httpServer + ":" + port + "/control.py?key=" + key;
-        (new swGateHttpRequest(this)).execute(request);
-        showWidget();
+        // Force 1st refresh
+        onScheduledRefresh();
     }
 
     @Override
@@ -79,7 +78,8 @@ public class swGateWidget extends BaseWidget implements swGateHttpRequest.onHttp
     @Override
     public void onScheduledRefresh() {
         // Update widget...
-        (new swGateHttpRequest(this)).execute(httpServer);
+        String request = "http://" + httpServer + ":" + port + "/control.py?key=" + key;
+        (new swGateHttpRequest(this)).execute(request);
         showWidget();
     }
 
@@ -116,11 +116,13 @@ public class swGateWidget extends BaseWidget implements swGateHttpRequest.onHttp
 
     @Override
     public int getWidth() {
+        // 1 cell width
         return (int)(mContext.getResources().getDimension(R.dimen.smart_watch_2_widget_cell_width) * 1);
     }
 
     @Override
     public int getHeight() {
+        // 2 cells height
         return (int)(mContext.getResources().getDimension(R.dimen.smart_watch_2_widget_cell_height) * 2);
     }
 
