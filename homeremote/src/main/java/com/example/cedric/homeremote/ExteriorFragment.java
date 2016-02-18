@@ -29,6 +29,7 @@ public class ExteriorFragment extends Fragment implements HttpRequest.onHttpRequ
     private ToggleButton[] toggles;
     private Timer timer;
     private TimerTask timerTask;
+    private HttpRequest httpReq = null;
     static String httpServer, port, key;
 
     @Override
@@ -164,6 +165,7 @@ public class ExteriorFragment extends Fragment implements HttpRequest.onHttpRequ
             e.printStackTrace();
             showMessage("Bad server response !");
         }
+        httpReq = null;
     }
 
     private void showMessage(String message){
@@ -184,19 +186,29 @@ public class ExteriorFragment extends Fragment implements HttpRequest.onHttpRequ
         String data = "/control.py?key=" + key + "&" + s;
         String request = "http://" + httpServer + ":" + port + data;
         Log.d(">>>", "Request : " + request);
-        (new HttpRequest(this)).execute(request);
+        httpReq = new HttpRequest(this);
+        httpReq.execute(request);
         return true;
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        if (httpReq != null) httpReq.abort();
         timer.cancel();
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        if (httpReq != null) httpReq.abort();
+        timer.cancel();
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        if (httpReq != null) httpReq.abort();
         timer.cancel();
     }
 

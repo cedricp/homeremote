@@ -32,6 +32,10 @@ public class HttpRequest extends AsyncTask<String, Void, String>
         void onHttpRequestComplete(String s);
     }
 
+    public void abort(){
+        listener = null;
+    }
+
     @Override
     protected String doInBackground(String... urls) {
         HttpParams httpParameters = new BasicHttpParams();
@@ -59,7 +63,8 @@ public class HttpRequest extends AsyncTask<String, Void, String>
 
     @Override
     protected void onPostExecute(String s){
-        listener.onHttpRequestComplete(s);
+        if (listener != null)
+            listener.onHttpRequestComplete(s);
     }
 
 }
