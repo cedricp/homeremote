@@ -3,6 +3,7 @@ package com.example.cedric.homeremote;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTabHost;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -10,10 +11,18 @@ import android.view.MenuItem;
  * Created by cedric on 1/25/16.
  */
 public class HomeRemoteActivity extends FragmentActivity {
+    private FragmentTabHost mTabHost;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.homeremote);
+        setContentView(R.layout.activity_main);
+
+        mTabHost = (FragmentTabHost)findViewById(android.R.id.tabhost);
+        mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
+
+        mTabHost.addTab(mTabHost.newTabSpec("tab1").setIndicator("Tab1"),
+                ExteriorFragment.class, null);
     }
 
 
@@ -44,4 +53,5 @@ public class HomeRemoteActivity extends FragmentActivity {
         Intent i = new Intent(getApplicationContext(), SettingsRemoteActivity.class);
         startActivity(i);
     }
+
 }
