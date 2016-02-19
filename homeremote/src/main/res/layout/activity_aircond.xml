@@ -3,16 +3,59 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/scrollView2" >
 
-        <NumberPicker
-            android:layout_width="wrap_content"
-            android:layout_height="85dp"
-            android:id="@+id/temperature"
-            android:orientation="vertical" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/main_layout">
 
-    </LinearLayout>
+            <Spinner
+                android:layout_width="fill_parent"
+                android:layout_height="70dp"
+                android:id="@+id/model_spinner"
+                android:spinnerMode="dropdown" />
+
+            <Switch
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Power"
+                android:id="@+id/switch1"
+                android:checked="false" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Temperature"
+                    android:id="@+id/temp_view"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:gravity="center_vertical" />
+
+                <NumberPicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="85dp"
+                    android:id="@+id/temperature"
+                    android:orientation="vertical" />
+
+            </LinearLayout>
+
+            <com.jjoe64.graphview.GraphView
+                android:layout_width="match_parent"
+                android:layout_height="200dip"
+                android:id="@+id/graph" />
+
+        </LinearLayout>
+    </ScrollView>
+
 </LinearLayout>
