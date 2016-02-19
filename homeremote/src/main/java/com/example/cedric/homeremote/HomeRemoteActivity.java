@@ -25,7 +25,7 @@ public class HomeRemoteActivity extends FragmentActivity {
 
         mTabHost.addTab(mTabHost.newTabSpec("tab1").setIndicator("Exterior"),
                 ExteriorFragment.class, null);
-        mTabHost.addTab(mTabHost.newTabSpec("tab2").setIndicator("AirCond"),
+        mTabHost.addTab(mTabHost.newTabSpec("tab2").setIndicator("Interior"),
                 AircondFragment.class, null);
 
     }

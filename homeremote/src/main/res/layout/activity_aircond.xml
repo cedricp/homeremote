@@ -24,7 +24,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Power"
-                android:id="@+id/switch1"
+                android:id="@+id/power_switch"
                 android:checked="false" />
 
             <LinearLayout
@@ -53,8 +53,11 @@
             <com.jjoe64.graphview.GraphView
                 android:layout_width="match_parent"
                 android:layout_height="200dip"
-                android:id="@+id/graph" />
-
+                android:id="@+id/graph_hum" />
+            <com.jjoe64.graphview.GraphView
+                android:layout_width="match_parent"
+                android:layout_height="200dip"
+                android:id="@+id/graph_temp" />
         </LinearLayout>
     </ScrollView>
 
