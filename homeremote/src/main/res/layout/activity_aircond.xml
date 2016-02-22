@@ -14,18 +14,80 @@
             android:layout_height="wrap_content"
             android:id="@+id/main_layout">
 
-            <Spinner
-                android:layout_width="fill_parent"
-                android:layout_height="70dp"
-                android:id="@+id/model_spinner"
-                android:spinnerMode="dropdown" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Model"
+                    android:id="@+id/textView11"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center"
+                    android:layout_weight="1" />
+
+                <com.example.cedric.homeremote.SaneSpinner
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:id="@+id/model_spinner"
+                    android:spinnerMode="dropdown"
+                    android:layout_weight="0" />
+            </LinearLayout>
 
             <Switch
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Power"
                 android:id="@+id/power_switch"
                 android:checked="false" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Function mode"
+                    android:id="@+id/textView13"
+                    android:gravity="center_vertical"
+                    android:layout_weight="1" />
+                <com.example.cedric.homeremote.SaneSpinner
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:id="@+id/func_spinner"
+                    android:layout_weight="0"
+                    android:spinnerMode="dropdown" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Fan mode"
+                    android:id="@+id/textView12"
+                    android:gravity="center_vertical"
+                    android:layout_weight="1" />
+
+                <com.example.cedric.homeremote.SaneSpinner
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:id="@+id/fan_spinner"
+                    android:layout_weight="0"
+                    android:spinnerMode="dropdown" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:orientation="horizontal"

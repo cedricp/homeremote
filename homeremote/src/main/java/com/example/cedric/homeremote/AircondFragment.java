@@ -2,7 +2,6 @@ package com.example.cedric.homeremote;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -12,12 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
@@ -26,30 +23,38 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.ArrayList;
 
 
 /**
  * Created by cedric on 2/18/16.
  */
 public class AircondFragment extends Fragment implements HttpRequest.onHttpRequestComplete {
-    private HttpRequest httpReq = null;
     static String httpServer, port, key, currentAircond;
 
-    private String[]        arraySpinner;
+    private String[]        arraySpinner, arrayFanSpinner, arrayModeSpinner;
     private View            view;
-    private Spinner         model_spinner;
+    private Spinner         modelSpinner;
+    private SaneSpinner     fanSpinner, modeSpinner;
     private NumberPicker    tempPicker;
     private Switch          power_switch;
+    private ArrayAdapter<String> fanAdapter, modeAdapter;
+
+    private Boolean         can_treat_event = false;
+    private ArrayList<HttpRequest> httpReq  = null;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.activity_aircond, container, false);
 
+        httpReq = new ArrayList<>();
+
         currentAircond = "airton";
 
         arraySpinner = new String[] { "Airton", "Fujitsu" };
+        arrayFanSpinner = new String[] {"AUTO", "HIGH", "MEDIUM", "LOW", "QUIET"};
+        arrayModeSpinner = new String[] {"AUTO", "COOL", "HEAT", "DRY", "FAN"};
 
         tempPicker = (NumberPicker)view.findViewById(R.id.temperature);
         tempPicker.setMinValue(16);
@@ -64,17 +69,25 @@ public class AircondFragment extends Fragment implements HttpRequest.onHttpReque
             public void onScrollStateChange(NumberPicker numberPicker, int scrollState) {
                 if (scrollState == NumberPicker.OnScrollListener.SCROLL_STATE_IDLE) {
                     sendHttp("aircond_settemp=" + Integer.valueOf(tempPicker.getValue()) + "&aircond_model=" + currentAircond);
-                    Log.i(">>>", "val " + Integer.valueOf(tempPicker.getValue()));
                 }
             }
         });
 
-        model_spinner = (Spinner)view.findViewById(R.id.model_spinner);
+        modelSpinner = (SaneSpinner)view.findViewById(R.id.model_spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.custom_spinner_item, arraySpinner);
-        model_spinner.setAdapter(adapter);
-        model_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        modelSpinner.setAdapter(adapter);
+
+        fanSpinner = (SaneSpinner)view.findViewById(R.id.fan_spinner);
+        fanAdapter = new ArrayAdapter<>(getContext(), R.layout.custom_spinner_item, arrayFanSpinner);
+        fanSpinner.setAdapter(fanAdapter);
+
+
+        modelSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (!can_treat_event)
+                    return;
+
                 if (position == 0)
                     currentAircond = "airton";
                 else
@@ -88,6 +101,76 @@ public class AircondFragment extends Fragment implements HttpRequest.onHttpReque
             }
         });
 
+        fanSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (!can_treat_event)
+                    return;
+                Log.i(">>>>", "onMode : " + Integer.valueOf(position));
+                String mode = "auto";
+                switch (fanAdapter.getItem(position)) {
+                    case "AUTO":
+                        mode = "auto";
+                        break;
+                    case "HIGH":
+                        mode = "high";
+                        break;
+                    case "MEDIUM":
+                        mode = "mid";
+                        break;
+                    case "LOW":
+                        mode = "low";
+                        break;
+                    case "QUIET":
+                        mode = "quiet";
+                        break;
+                    default:
+                        break;
+                }
+                sendHttp("aircond_model=" + currentAircond + "&aircond_setfanmode=" + mode);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        modeSpinner = (SaneSpinner)view.findViewById(R.id.func_spinner);
+        modeAdapter = new ArrayAdapter<>(getContext(), R.layout.custom_spinner_item, arrayModeSpinner);
+        modeSpinner.setAdapter(modeAdapter);
+        modeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (!can_treat_event)
+                    return;
+                String mode = "auto";
+                switch (modeAdapter.getItem(position)) {
+                    case "AUTO":
+                        mode = "auto";
+                        break;
+                    case "COOL":
+                        mode = "cool";
+                        break;
+                    case "HEAT":
+                        mode = "heat";
+                        break;
+                    case "FAN":
+                        mode = "fan";
+                        break;
+                    case "DRY":
+                        mode = "DRY";
+                        break;
+                    default:
+                        break;
+                }
+                sendHttp("aircond_model=" + currentAircond + "&aircond_setmode=" + mode);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
         power_switch = (Switch)view.findViewById(R.id.power_switch);
 
         power_switch.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +179,7 @@ public class AircondFragment extends Fragment implements HttpRequest.onHttpReque
                 sendHttp("aircond_setpower=" + state + "&aircond_model=" + currentAircond);
             }
         });
+
         //renderGraphHumidity();
         //renderGraphTemperature();
         loadPrefs();
@@ -109,30 +193,72 @@ public class AircondFragment extends Fragment implements HttpRequest.onHttpReque
 
         if (s.equals("NOK")){
             showMessage("Cannot connect to home server !");
-            httpReq = null;
             return;
         }
 
         if (s.toUpperCase().equals("OK")) {
-            httpReq = null;
             return;
         }
 
         try {
             jsonOb = new JSONObject(s);
             String temperature = jsonOb.getString("ac_temperature");
-            tempPicker.setValue(Integer.valueOf(temperature));
+            String mode = jsonOb.getString("ac_mode");
             String power = jsonOb.getString("ac_power_state");
+            String fanmode = jsonOb.getString("ac_fan_mode");
+
+            tempPicker.setValue(Integer.valueOf(temperature));
+
             if (power.equals("ON"))
                 power_switch.setChecked(true);
             else
                 power_switch.setChecked(false);
+
+            switch (fanmode){
+                case "HIGH":
+                    fanSpinner.setSelection(fanAdapter.getPosition("HIGH"), false, true);
+                    break;
+                case "MEDIUM":
+                    fanSpinner.setSelection(fanAdapter.getPosition("MEDIUM"), false, true);
+                    break;
+                case "LOW":
+                    fanSpinner.setSelection(fanAdapter.getPosition("LOW"), false, true);
+                    break;
+                case "QUIET":
+                    fanSpinner.setSelection(fanAdapter.getPosition("QUIET"), false, true);
+                    break;
+                default:
+                case "AUTO":
+                    fanSpinner.setSelection(fanAdapter.getPosition("AUTO"), false, true);
+                    break;
+            }
+
+            switch (mode){
+                case "AUTO":
+                    modeSpinner.setSelection(modeAdapter.getPosition("AUTO"), false, true);
+                    break;
+                case "COOL":
+                    modeSpinner.setSelection(modeAdapter.getPosition("COOL"), false, true);
+                    break;
+                case "HEAT":
+                    modeSpinner.setSelection(modeAdapter.getPosition("HEAT"), false, true);
+                    break;
+                case "FAN":
+                    modeSpinner.setSelection(modeAdapter.getPosition("FAN"), false, true);
+                    break;
+                case "DRY":
+                    modeSpinner.setSelection(modeAdapter.getPosition("DRY"), false, true);
+                    break;
+                default:
+                    break;
+            }
         }
         catch (JSONException e){
             e.printStackTrace();
-            showMessage("Unknown server response...");
+            showMessage("Unknown server response... {" + s + "}");
         }
-        httpReq = null;
+
+        can_treat_event = true;
     }
 
     private void showMessage(String message){
@@ -177,43 +303,46 @@ public class AircondFragment extends Fragment implements HttpRequest.onHttpReque
         }
         String data = "/control.py?key=" + key + "&" + s;
         String request = "http://" + httpServer + ":" + port + data;
-        httpReq = new HttpRequest(this);
-        httpReq.execute(request);
+        HttpRequest req = new HttpRequest(this);
+        httpReq.add(req);
+        req.execute(request);
         return true;
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (httpReq != null) httpReq.abort();
+        int j = 0;
+        while(j < httpReq.size()){
+            httpReq.get(j).abort();
+            j++;
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (httpReq != null) httpReq.abort();
+        int j = 0;
+        while(j < httpReq.size()){
+            httpReq.get(j).abort();
+            j++;
+        }
     }
 
     @Override
     public void onDestroy(){
         super.onDestroy();
-        if (httpReq != null) httpReq.abort();
+        int j = 0;
+        while(j < httpReq.size()){
+            httpReq.get(j).abort();
+            j++;
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-
-        // Send a request to initialize all buttons status from server
-//        timerTask = new TimerTask() {
-//            @Override
-//            public void run() {
-//                updateFromServer();
-//            }
-//        };
-//        timer = new Timer();
-//        timer.schedule(timerTask, 10, 10000);
         SharedPreferences.OnSharedPreferenceChangeListener spChanged = new
                 SharedPreferences.OnSharedPreferenceChangeListener() {
                     @Override

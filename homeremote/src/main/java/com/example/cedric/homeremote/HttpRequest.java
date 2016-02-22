@@ -23,6 +23,7 @@ public class HttpRequest extends AsyncTask<String, Void, String>
 {
     private onHttpRequestComplete listener;
     private String result;
+    public Boolean finished = false;
 
     public HttpRequest(onHttpRequestComplete listener){
         this.listener = listener;
@@ -39,7 +40,7 @@ public class HttpRequest extends AsyncTask<String, Void, String>
     @Override
     protected String doInBackground(String... urls) {
         HttpParams httpParameters = new BasicHttpParams();
-        HttpConnectionParams.setConnectionTimeout(httpParameters, 4000);
+        HttpConnectionParams.setConnectionTimeout(httpParameters, 10000);
         HttpResponse response = null;
         HttpClient client = new DefaultHttpClient();
         HttpGet httpget= new HttpGet(urls[0]);
@@ -57,6 +58,7 @@ public class HttpRequest extends AsyncTask<String, Void, String>
             e.printStackTrace();
             this.result = "NOK";
         }
+        finished = true;
         return this.result;
 
     }
@@ -65,6 +67,7 @@ public class HttpRequest extends AsyncTask<String, Void, String>
     protected void onPostExecute(String s){
         if (listener != null)
             listener.onHttpRequestComplete(s);
+        finished = true;
     }
 
 }

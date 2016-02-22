@@ -19,6 +19,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -29,12 +32,15 @@ public class ExteriorFragment extends Fragment implements HttpRequest.onHttpRequ
     private ToggleButton[] toggles;
     private Timer timer;
     private TimerTask timerTask;
-    private HttpRequest httpReq = null;
+    private ArrayList<HttpRequest> httpReq = null;
     static String httpServer, port, key;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        httpReq = new ArrayList<>();
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.activity_remote, container, false);
 
@@ -165,7 +171,7 @@ public class ExteriorFragment extends Fragment implements HttpRequest.onHttpRequ
             e.printStackTrace();
             showMessage("Bad server response !");
         }
-        httpReq = null;
+
     }
 
     private void showMessage(String message){
@@ -180,35 +186,46 @@ public class ExteriorFragment extends Fragment implements HttpRequest.onHttpRequ
 
     private boolean sendHttp(String s){
         if (httpServer.isEmpty() || port.isEmpty()){
-            Log.d(">>>", "no sendHttp");
             return false;
         }
         String data = "/control.py?key=" + key + "&" + s;
         String request = "http://" + httpServer + ":" + port + data;
-        Log.d(">>>", "Request : " + request);
-        httpReq = new HttpRequest(this);
-        httpReq.execute(request);
+        HttpRequest req = new HttpRequest(this);
+        httpReq.add(req);
+        req.execute(request);
         return true;
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (httpReq != null) httpReq.abort();
+        int j = 0;
+        while(j < httpReq.size()){
+            httpReq.get(j).abort();
+            j++;
+        }
         timer.cancel();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (httpReq != null) httpReq.abort();
+        int j = 0;
+        while(j < httpReq.size()){
+            httpReq.get(j).abort();
+            j++;
+        }
         timer.cancel();
     }
 
     @Override
     public void onDestroy(){
         super.onDestroy();
-        if (httpReq != null) httpReq.abort();
+        int j = 0;
+        while(j < httpReq.size()){
+            httpReq.get(j).abort();
+            j++;
+        }
         timer.cancel();
     }
 
