@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
@@ -22,6 +23,7 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -38,9 +40,10 @@ public class AircondFragment extends Fragment implements HttpRequest.onHttpReque
     private SaneSpinner     fanSpinner, modeSpinner;
     private NumberPicker    tempPicker;
     private Switch          power_switch;
-    private ArrayAdapter<String> fanAdapter, modeAdapter;
-
+    private TextView        view_temp, view_hum;
     private Boolean         can_treat_event = false;
+
+    private ArrayAdapter<String> fanAdapter, modeAdapter;
     private ArrayList<HttpRequest> httpReq  = null;
 
     @Override
@@ -55,6 +58,9 @@ public class AircondFragment extends Fragment implements HttpRequest.onHttpReque
         arraySpinner = new String[] { "Airton", "Fujitsu" };
         arrayFanSpinner = new String[] {"AUTO", "HIGH", "MEDIUM", "LOW", "QUIET"};
         arrayModeSpinner = new String[] {"AUTO", "COOL", "HEAT", "DRY", "FAN"};
+
+        view_temp = (TextView)view.findViewById(R.id.curr_temp);
+        view_hum  = (TextView)view.findViewById(R.id.curr_hum);
 
         tempPicker = (NumberPicker)view.findViewById(R.id.temperature);
         tempPicker.setMinValue(16);
@@ -106,7 +112,7 @@ public class AircondFragment extends Fragment implements HttpRequest.onHttpReque
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (!can_treat_event)
                     return;
-                Log.i(">>>>", "onMode : " + Integer.valueOf(position));
+
                 String mode = "auto";
                 switch (fanAdapter.getItem(position)) {
                     case "AUTO":
@@ -206,6 +212,11 @@ public class AircondFragment extends Fragment implements HttpRequest.onHttpReque
             String mode = jsonOb.getString("ac_mode");
             String power = jsonOb.getString("ac_power_state");
             String fanmode = jsonOb.getString("ac_fan_mode");
+            double room_temp = jsonOb.getDouble("temperature");
+            double room_hum = jsonOb.getDouble("humidity");
+
+            view_temp.setText(String.valueOf(room_temp));
+            view_hum.setText(String.valueOf(room_hum));
 
             tempPicker.setValue(Integer.valueOf(temperature));
 

@@ -14,112 +14,202 @@
             android:layout_height="wrap_content"
             android:id="@+id/main_layout">
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Model"
-                    android:id="@+id/textView11"
-                    android:gravity="center_vertical"
-                    android:layout_gravity="center"
-                    android:layout_weight="1" />
-
-                <com.example.cedric.homeremote.SaneSpinner
-                    android:layout_width="200dp"
-                    android:layout_height="50dp"
-                    android:id="@+id/model_spinner"
-                    android:spinnerMode="dropdown"
-                    android:layout_weight="0" />
-            </LinearLayout>
-
-            <Switch
-                android:layout_width="fill_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Power"
-                android:id="@+id/power_switch"
-                android:checked="false" />
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Air Information"
+                android:id="@+id/textView15"
+                android:layout_gravity="center_horizontal" />
 
             <LinearLayout
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@layout/customborders">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Function mode"
-                    android:id="@+id/textView13"
-                    android:gravity="center_vertical"
-                    android:layout_weight="1" />
-                <com.example.cedric.homeremote.SaneSpinner
-                    android:layout_width="200dp"
-                    android:layout_height="50dp"
-                    android:id="@+id/func_spinner"
-                    android:layout_weight="0"
-                    android:spinnerMode="dropdown" />
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Temperature"
+                        android:id="@+id/textView14"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="0"
+                        android:id="@+id/curr_temp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Humidity (%)"
+                        android:id="@+id/textView16"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="0"
+                        android:id="@+id/curr_hum" />
+                </LinearLayout>
             </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Air Control"
+                android:id="@+id/textView17"
+                android:layout_gravity="center_horizontal" />
 
             <LinearLayout
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@layout/customborders">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent"
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Model"
+                        android:id="@+id/textView11"
+                        android:gravity="center_vertical"
+                        android:layout_gravity="center"
+                        android:layout_weight="1" />
+
+                    <com.example.cedric.homeremote.SaneSpinner
+                        android:layout_width="200dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/model_spinner"
+                        android:spinnerMode="dropdown"
+                        android:layout_weight="0" />
+                </LinearLayout>
+
+                <Switch
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Fan mode"
-                    android:id="@+id/textView12"
-                    android:gravity="center_vertical"
-                    android:layout_weight="1" />
+                    android:text="Power"
+                    android:id="@+id/power_switch"
+                    android:checked="false" />
 
-                <com.example.cedric.homeremote.SaneSpinner
-                    android:layout_width="200dp"
-                    android:layout_height="50dp"
-                    android:id="@+id/fan_spinner"
-                    android:layout_weight="0"
-                    android:spinnerMode="dropdown" />
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Mode"
+                        android:id="@+id/textView13"
+                        android:gravity="center_vertical"
+                        android:layout_weight="1" />
+                    <com.example.cedric.homeremote.SaneSpinner
+                        android:layout_width="200dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/func_spinner"
+                        android:layout_weight="0"
+                        android:spinnerMode="dropdown" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Fan"
+                        android:id="@+id/textView12"
+                        android:gravity="center_vertical"
+                        android:layout_weight="1" />
+
+                    <com.example.cedric.homeremote.SaneSpinner
+                        android:layout_width="200dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/fan_spinner"
+                        android:layout_weight="0"
+                        android:spinnerMode="dropdown" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Temperature"
+                        android:id="@+id/temp_view"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center_vertical" />
+
+                    <NumberPicker
+                        android:layout_width="wrap_content"
+                        android:layout_height="85dp"
+                        android:id="@+id/temperature"
+                        android:orientation="vertical" />
+
+                </LinearLayout>
             </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Air Graphs"
+                android:id="@+id/textView18"
+                android:layout_gravity="center_horizontal" />
 
             <LinearLayout
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@layout/customborders">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Temperature"
-                    android:id="@+id/temp_view"
-                    android:layout_weight="1"
-                    android:layout_gravity="center"
-                    android:gravity="center_vertical" />
+                <com.jjoe64.graphview.GraphView
+                    android:layout_width="match_parent"
+                    android:layout_height="200dip"
+                    android:id="@+id/graph_hum" />
 
-                <NumberPicker
-                    android:layout_width="wrap_content"
-                    android:layout_height="85dp"
-                    android:id="@+id/temperature"
-                    android:orientation="vertical" />
-
+                <com.jjoe64.graphview.GraphView
+                    android:layout_width="match_parent"
+                    android:layout_height="200dip"
+                    android:id="@+id/graph_temp" />
             </LinearLayout>
 
-            <com.jjoe64.graphview.GraphView
-                android:layout_width="match_parent"
-                android:layout_height="200dip"
-                android:id="@+id/graph_hum" />
-            <com.jjoe64.graphview.GraphView
-                android:layout_width="match_parent"
-                android:layout_height="200dip"
-                android:id="@+id/graph_temp" />
         </LinearLayout>
     </ScrollView>
 
